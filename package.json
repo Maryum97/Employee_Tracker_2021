@@ -4,7 +4,8 @@
   "description": "installed for databases",
   "main": "server.js",
   "dependencies": {
-    "inquirer": "^8.0.0"
+    "inquirer": "^8.0.0",
+    "mysql2": "^2.2.5"
   },
   "devDependencies": {},
   "scripts": {
