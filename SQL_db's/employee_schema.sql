@@ -54,4 +54,4 @@ INNER JOIN role ON employee.id = role.id;
 -- JOIN 3 --
 SELECT employee.first_name, employee.last_name, department.dep_name
 FROM employee
-INNER JOIN department ON employee.id = department.dep_name;
+LEFT JOIN department ON employee.id = department.dep_name;
