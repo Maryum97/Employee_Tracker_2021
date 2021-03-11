@@ -143,7 +143,7 @@ const viewByDepartment = () => {
 }
 
 // ADD EMPLOYEE
-// First declare the function that produces an array of new and existing roles for the new employee
+// First declare the function that produces an array of choices of new and existing roles for the new employee
 rolesArray = [];
 const chooseRole = () => {
     connection.query(
@@ -156,7 +156,7 @@ const chooseRole = () => {
         });
     return rolesArray;
 }
-// Then declare the function that produces an array of new and existing managers for the new employee
+// Then declare the function that produces an array of choices of new and existing managers for the new employee
 managerArray = [];
 const chooseManager = () => {
     connection.query(
@@ -171,60 +171,108 @@ const chooseManager = () => {
 }
 // Function to add employee here
 const addEmployee = () => {
-    connection.query("SELECT * FROM role",
+    inquirer.prompt([
+        {
+            type: "input",
+            message: "Please enter the employee's first name:",
+            name: "firstName"
+        },
+        {
+            type: "input",
+            message: "Please enter the employee's last name:",
+            name: "lastName"
+        },
+        {
+            type: "list",
+            message: "Please select the employee's role:",
+            name: "role",
+            choices: chooseRole()
+        },
+        {
+            type: "input",
+            message: "Please specify the ID of the employee's manager:",
+            name: "manager"
+        }
+    ]).then((value) => {
+        var roleId = chooseRole().indexOf(value.role) + 1;
+        var managerId = chooseManager().indexOf(value.manager) + 1;
+        connection.query(
+            "INSERT INTO employee SET ?",
+            {
+                first_name: value.firstName,
+                last_name: value.lastName,
+                manager_id: managerId,
+                role_id: roleId
+            },
+            (err) => {
+                if (err) throw err;
+                console.log("Your new employee has been added!");
+                userPrompt();
+            })
+
+    })
+}
+
+// ADD ROLE
+const addRole = () => {
+    connection.query(
+        "SELECT * FROM role",
         (err, res) => {
             if (err) throw err;
             inquirer.prompt([
                 {
                     type: "input",
-                    message: "Please enter the employee's first name:",
-                    name: "firstName"
+                    message: "Please specify the title of the role:",
+                    name: "title"
                 },
                 {
                     type: "input",
-                    message: "Please enter the employee's last name:",
-                    name: "lastName"
-                },
-                {
-                    type: "list",
-                    message: "Please select the employee's role:",
-                    name: "role",
-                    choices: chooseRole()
-                },
-                {
-                    type: "input",
-                    message: "Please specify the ID of the employee's manager:",
-                    name: "manager"
+                    message: "Please specify the salaray of the role:",
+                    name: "salary"
                 }
-            ]).then((value) => {
-                var roleId = chooseRole().indexOf(value.role) + 1;
-                var managerId = chooseManager().indexOf(value.manager) + 1;
+            ]).then((res) => {
                 connection.query(
-                    "INSERT INTO employee SET ?",
+                    "INSERT INTO role SET ?",
                     {
-                        first_name: value.firstName,
-                        last_name: value.lastName,
-                        manager_id: managerId,
-                        role_id: roleId
+                        title: res.title,
+                        salary: res.salary
                     },
                     (err) => {
                         if (err) throw err;
-                        console.log("Your new employee has been added!");
+                        console.table(res);
                         userPrompt();
-                    })
-
+                    }
+                )
             })
         })
 }
 
-// ADD ROLE
-const addRole = () => {
-
-}
-
 // ADD DEPARTMENT
 const addDepartment = () => {
-
+    connection.query(
+        "SELECT * FROM department",
+        (err, res) => {
+            if (err) throw err;
+            inquirer.prompt([
+                {
+                    type: "input",
+                    message: "Please specify the name of the department you'd like to add:",
+                    name: "depName"
+                }
+            ]).then((res) => {
+                connection.query(
+                    "INSERT INTO department SET ?",
+                    {
+                        dep_name: res.depName
+                    },
+                    (err) => {
+                        if (err) throw err;
+                        console.table(res);
+                        userPrompt();
+                    }
+                )
+            })
+        })
 }
 
 // UPDATE EMPLOYEE ROLE
