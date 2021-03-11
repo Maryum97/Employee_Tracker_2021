@@ -33,6 +33,8 @@ const userPrompt = () => {
             name: "choice",
             choices: [
                 "View All Employees",
+                "View All Roles",
+                "View All Departments",
                 "View All Employees By Roles",
                 "View all Employees By Departments",
                 "Add Employee",
@@ -45,15 +47,23 @@ const userPrompt = () => {
         switch (value.choice) {
             // Call a function for each individual choice in the prompt
             case "View All Employees":
-                viewEmployees();
+                viewAllEmployees();
+                break;
+
+            case "View All Roles":
+                viewAllRoles();
+                break;
+
+            case "View All Departments":
+                viewAllDepartments();
                 break;
 
             case "View All Employees By Roles":
-                viewRoles();
+                viewByRole();
                 break;
 
             case "View All Employees By Departments":
-                viewDepartments();
+                viewByDepartment();
                 break;
 
             case "Add Employee":
@@ -78,7 +88,7 @@ const userPrompt = () => {
 // Declare all functions here, from the above switch statement
 
 // VIEW ALL EMPLOYEES
-const viewEmployees = () => {
+const viewAllEmployees = () => {
     connection.query(
         "SELECT employee.first_name, employee.last_name, employee.role_id, role.title, role.salary, role.department_id, department.dep_name FROM employee INNER JOIN role ON employee.id = role.id INNER JOIN department ON employee.id = department.dep_name;",
         (err, res) => {
@@ -88,8 +98,30 @@ const viewEmployees = () => {
         });
 }
 
+// VIEW ALL ROLES
+const viewAllRoles = () => {
+    connection.query(
+        "SELECT * FROM role",
+        (err, res) => {
+            if (err) throw err;
+            console.table(res);
+            userPrompt();
+        });
+}
+
+// VIEW ALL DEPARTMENTS
+const viewAllDepartments = () => {
+    connection.query(
+        "SELECT * FROM department",
+        (err, res) => {
+            if (err) throw err;
+            console.table(res);
+            userPrompt();
+        });
+}
+
 // VIEW ALL EMPLOYEES BY ROLE
-const viewRoles = () => {
+const viewByRole = () => {
     connection.query(
         "SELECT employee.first_name, employee.last_name, employee.role_id, role.title, role.salary, role.department_id FROM employee INNER JOIN role ON employee.id = role.id;",
         (err, res) => {
@@ -100,7 +132,7 @@ const viewRoles = () => {
 }
 
 // VIEW ALL EMPLOYEES BY DEPARTMENT
-const viewDepartments = () => {
+const viewByDepartment = () => {
     connection.query(
         "SELECT employee.first_name, employee.last_name, department.dep_name FROM employee INNER JOIN department ON employee.id = department.dep_name;",
         (err, res) => {
