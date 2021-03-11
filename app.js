@@ -90,7 +90,7 @@ const userPrompt = () => {
 // VIEW ALL EMPLOYEES
 const viewAllEmployees = () => {
     connection.query(
-        "SELECT employee.first_name, employee.last_name, employee.role_id, role.title, role.salary, role.department_id, department.dep_name FROM employee INNER JOIN role ON employee.id = role.id INNER JOIN department ON employee.id = department.dep_name;",
+        "SELECT employee.first_name, employee.last_name, department.dep_name FROM employee INNER JOIN role ON employee.role_id = role.id LEFT JOIN department ON department.id = role.department_id;",
         (err, res) => {
             if (err) throw err;
             console.table(res);
@@ -143,8 +143,78 @@ const viewByDepartment = () => {
 }
 
 // ADD EMPLOYEE
+// First declare the function that produces an array of new and existing roles for the new employee
+rolesArray = [];
+const chooseRole = () => {
+    connection.query(
+        "SELECT * FROM role",
+        (err, res) => {
+            if (err) throw err;
+            for (var i = 0; i < res.length; i++) {
+                rolesArray.push(res[i].title);
+            }
+        });
+    return rolesArray;
+}
+// Then declare the function that produces an array of new and existing managers for the new employee
+managerArray = [];
+const chooseManager = () => {
+    connection.query(
+        "SELECT first_name, last_name FROM employee WHERE manager_id IS NULL",
+        (err, res) => {
+            if (err) throw err;
+            for (var i = 0; i < res.length; i++) {
+                managerArray.push(res[i].manager_id);
+            }
+        });
+    return managerArray;
+}
+// Function to add employee here
 const addEmployee = () => {
+    connection.query("SELECT * FROM role",
+        (err, res) => {
+            if (err) throw err;
+            inquirer.prompt([
+                {
+                    type: "input",
+                    message: "Please enter the employee's first name:",
+                    name: "firstName"
+                },
+                {
+                    type: "input",
+                    message: "Please enter the employee's last name:",
+                    name: "lastName"
+                },
+                {
+                    type: "list",
+                    message: "Please select the employee's role:",
+                    name: "role",
+                    choices: chooseRole()
+                },
+                {
+                    type: "input",
+                    message: "Please specify the ID of the employee's manager:",
+                    name: "manager"
+                }
+            ]).then((value) => {
+                var roleId = chooseRole().indexOf(value.role) + 1;
+                var managerId = chooseManager().indexOf(value.manager) + 1;
+                connection.query(
+                    "INSERT INTO employee SET ?",
+                    {
+                        first_name: value.firstName,
+                        last_name: value.lastName,
+                        manager_id: managerId,
+                        role_id: roleId
+                    },
+                    (err) => {
+                        if (err) throw err;
+                        console.log("Your new employee has been added!");
+                        userPrompt();
+                    })
 
+            })
+        })
 }
 
 // ADD ROLE
