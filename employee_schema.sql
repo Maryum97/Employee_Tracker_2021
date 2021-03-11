@@ -44,4 +44,14 @@ SELECT * FROM employee;
 SELECT employee.first_name, employee.last_name, employee.role_id, role.title, role.salary, role.department_id, department.dep_name
 FROM employee
 INNER JOIN role ON employee.id = role.id
+LEFT JOIN department ON employee.id = department.dep_name;
+
+-- JOIN 2 --
+SELECT employee.first_name, employee.last_name, employee.role_id, role.title, role.salary, role.department_id
+FROM employee
+INNER JOIN role ON employee.id = role.id;
+
+-- JOIN 3 --
+SELECT employee.first_name, employee.last_name, department.dep_name
+FROM employee
 INNER JOIN department ON employee.id = department.dep_name;
