@@ -41,8 +41,8 @@ const userPrompt = () => {
                 "Update Employee Role"
             ]
         }
-    ]).then(({ value }) => {
-        switch (value.choices) {
+    ]).then((value) => {
+        switch (value.choice) {
             // Call a function for each individual choice in the prompt
             case "View All Employees":
                 viewEmployees();
@@ -79,17 +79,35 @@ const userPrompt = () => {
 
 // VIEW ALL EMPLOYEES
 const viewEmployees = () => {
-
+    connection.query(
+        "SELECT employee.first_name, employee.last_name, employee.role_id, role.title, role.salary, role.department_id, department.dep_name FROM employee INNER JOIN role ON employee.id = role.id INNER JOIN department ON employee.id = department.dep_name;",
+        (err, res) => {
+            if (err) throw err;
+            console.table(res);
+            userPrompt();
+        });
 }
 
 // VIEW ALL EMPLOYEES BY ROLE
 const viewRoles = () => {
+    connect.query(
+        (err, res) => {
+            if (err) throw err;
+            console.table(res);
+            userPrompt();
+        }
+    )
 
 }
 
 // VIEW ALL EMPLOYEES BY DEPARTMENT
 const viewDepartments = () => {
-
+    connect.query(
+        (err, res) => {
+            if (err) throw err;
+            console.table(res);
+            userPrompt();
+        }
 }
 
 // ADD EMPLOYEE
