@@ -90,24 +90,24 @@ const viewEmployees = () => {
 
 // VIEW ALL EMPLOYEES BY ROLE
 const viewRoles = () => {
-    connect.query(
+    connection.query(
+        "SELECT employee.first_name, employee.last_name, employee.role_id, role.title, role.salary, role.department_id FROM employee INNER JOIN role ON employee.id = role.id;",
         (err, res) => {
             if (err) throw err;
             console.table(res);
             userPrompt();
-        }
-    )
-
+        });
 }
 
 // VIEW ALL EMPLOYEES BY DEPARTMENT
 const viewDepartments = () => {
-    connect.query(
+    connection.query(
+        "SELECT employee.first_name, employee.last_name, department.dep_name FROM employee INNER JOIN department ON employee.id = department.dep_name;",
         (err, res) => {
             if (err) throw err;
             console.table(res);
             userPrompt();
-        }
+        });
 }
 
 // ADD EMPLOYEE
