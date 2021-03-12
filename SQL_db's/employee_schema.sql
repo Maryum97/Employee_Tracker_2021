@@ -31,11 +31,22 @@ manager_id INTEGER (100),
 PRIMARY KEY (id)
 );
 
+-- Table 4 --
+CREATE TABLE manager (
+id INTEGER (100) auto_increment NOT NULL,
+first_name VARCHAR (100) NOT NULL,
+last_name VARCHAR (100) NOT NULL,
+manager_id INTEGER (100),
+PRIMARY KEY (id)
+);
+
 SELECT * FROM department;
 
 SELECT * FROM role;
 
 SELECT * FROM employee;
+
+SELECT * FROM manager;
 
 
 -- JOIN STATEMENTS HERE --
