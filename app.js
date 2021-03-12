@@ -363,7 +363,8 @@ const deleteEmployee = () => {
                     [value.employee],
                     (err, res) => {
                         if (err) throw err;
-                        console.table("Your employee has been deleted!");
+                        console.table(res);
+                        console.log("Your employee has been deleted!");
                         userPrompt();
                     })
             })
@@ -372,10 +373,56 @@ const deleteEmployee = () => {
 
 // DELETE ROLE
 const deleteRole = () => {
-
+    connection.query(
+        "SELECT role.id, role.title, role.salary, role.department_id FROM role;",
+        (err, res) => {
+            if (err) throw err;
+            console.table(res);
+            inquirer.prompt([
+                {
+                    type: "input",
+                    message: "Please choose the ID of the role that you would like to delete:",
+                    name: "role"
+                },
+            ]).then((value) => {
+                console.log(value.role);
+                connection.query(
+                    `DELETE FROM employee WHERE id = ?;`,
+                    [value.role],
+                    (err, res) => {
+                        if (err) throw err;
+                        console.table(res);
+                        console.log("This role has been deleted!");
+                        userPrompt();
+                    })
+            })
+        })
 }
 
 // DELETE DEPARTMENT
 const deleteDepartment = () => {
-
+    connection.query(
+        "SELECT department.id, department.dep_name FROM department;",
+        (err, res) => {
+            if (err) throw err;
+            console.table(res);
+            inquirer.prompt([
+                {
+                    type: "input",
+                    message: "Please choose the ID of the department that you would like to delete:",
+                    name: "department"
+                },
+            ]).then((value) => {
+                console.log(value.department);
+                connection.query(
+                    `DELETE FROM department WHERE id = ?;`,
+                    [value.department],
+                    (err, res) => {
+                        if (err) throw err;
+                        console.table(res);
+                        console.log("This department has been deleted!");
+                        userPrompt();
+                    })
+            })
+        })
 }
