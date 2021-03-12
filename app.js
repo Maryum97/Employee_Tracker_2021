@@ -35,8 +35,10 @@ const userPrompt = () => {
                 "View All Employees",
                 "View All Roles",
                 "View All Departments",
-                "View All Employees By Roles",
-                "View all Employees By Departments",
+                "View All Managers",
+                "View All Employees By Role",
+                "View all Employees By Department",
+                "View all Employees By Manager",
                 "Add Employee",
                 "Add Role",
                 "Add Department",
@@ -61,12 +63,20 @@ const userPrompt = () => {
                 viewAllDepartments();
                 break;
 
-            case "View All Employees By Roles":
+            case "View All Managers":
+                viewAllManagers();
+                break;
+
+            case "View All Employees By Role":
                 viewByRole();
                 break;
 
-            case "View All Employees By Departments":
+            case "View All Employees By Department":
                 viewByDepartment();
+                break;
+
+            case "View all Employees By Manager":
+                viewByManager();
                 break;
 
             case "Add Employee":
@@ -135,6 +145,18 @@ const viewAllDepartments = () => {
         });
 }
 
+// VIEW ALL MANAGERS
+const viewAllManagers = () => {
+    connection.query(
+        "SELECT * FROM manager",
+        (err, res) => {
+            if (err) throw err;
+            console.table(res);
+            userPrompt();
+        }
+    )
+}
+
 // VIEW ALL EMPLOYEES BY ROLE
 const viewByRole = () => {
     connection.query(
@@ -155,6 +177,18 @@ const viewByDepartment = () => {
             console.table(res);
             userPrompt();
         });
+}
+
+// VIEW ALL EMPLOYEES BY MANAGER
+const viewByManager = () => {
+    connection.query(
+        "SELECT employee.first_name, employee.last_name, employee.manager_id, manager.first_name, manager.last_name FROM employee INNER JOIN manager ON employee.manager_id = manager.id;",
+        (err, res) => {
+            if (err) throw err;
+            console.table(res);
+            userPrompt();
+        }
+    )
 }
 
 // ADD EMPLOYEE
