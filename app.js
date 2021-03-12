@@ -349,7 +349,7 @@ const deleteEmployee = () => {
         "SELECT employee.id, employee.first_name, employee.last_name FROM employee;",
         (err, res) => {
             if (err) throw err;
-            viewAllEmployees();
+            console.table(res);
             inquirer.prompt([
                 {
                     type: "input",
@@ -357,6 +357,7 @@ const deleteEmployee = () => {
                     name: "employee"
                 },
             ]).then((value) => {
+                console.log(value.employee);
                 connection.query(
                     `DELETE FROM employee WHERE id = ?;`,
                     [value.employee],
