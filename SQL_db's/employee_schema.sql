@@ -61,12 +61,13 @@ FROM employee;
 -- JOIN 2 --
 SELECT employee.first_name, employee.last_name, employee.role_id, role.title, role.salary, role.department_id
 FROM employee
-INNER JOIN role ON employee.id = role.id;
+INNER JOIN role ON employee.role_id = role.id;
 
 -- JOIN 3 --
 SELECT employee.first_name, employee.last_name, department.dep_name
 FROM employee
-LEFT JOIN department ON employee.id = department.dep_name;
+JOIN department ON employee.id = department.dep_name
+LEFT JOIN department ON department.id = role.department_id;
 
 -- JOIN 4 (for manager) --
 SELECT employee.first_name, employee.last_name, employee.manager_id, manager.first_name, manager.last_name

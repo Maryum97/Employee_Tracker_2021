@@ -170,7 +170,7 @@ const viewAllManagers = () => {
 // VIEW ALL EMPLOYEES BY ROLE
 const viewByRole = () => {
     connection.query(
-        "SELECT employee.first_name, employee.last_name, employee.role_id, role.title, role.salary, role.department_id FROM employee INNER JOIN role ON employee.id = role.id;",
+        "SELECT employee.first_name, employee.last_name, employee.role_id, role.title, role.salary, role.department_id FROM employee INNER JOIN role ON employee.role_id = role.id;",
         (err, res) => {
             if (err) throw err;
             console.table(res);
