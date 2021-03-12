@@ -411,7 +411,7 @@ const updateRole = () => {
                 }
             ]).then((value) => {
                 var roleId = chooseRole().indexOf(value.role) + 1;
-                connection.query(`UPDATE employee SET role_id = ${roleId} WHERE first_name = ? AND last_name=?`,
+                connection.query(`UPDATE employee SET role_id = ${roleId} WHERE first_name = ? AND last_name = ?`,
                     [value.firstName, value.lastName],
                     (err, res) => {
                         if (err) throw err;
@@ -435,8 +435,8 @@ const selectManager = () => {
             for (var i = 0; i < res.length; i++) {
                 managerArr.push(res[i].id);
             }
-        }
-    )
+        });
+    return managerArr;
 }
 // Function to update manager here
 const updateManager = () => {
@@ -478,7 +478,7 @@ const updateManager = () => {
                 }
             ]).then((value) => {
                 var managerId = selectManager().indexOf(value.manager) + 1;
-                connection.query(`UPDATE employee SET manager_id = ${managerId} WHERE first_name = ? AND last_name=?`,
+                connection.query(`UPDATE employee SET manager_id = ${managerId} WHERE first_name = ? AND last_name = ?`,
                     [value.firstName, value.lastName],
                     (err, res) => {
                         if (err) throw err;
