@@ -40,7 +40,10 @@ const userPrompt = () => {
                 "Add Employee",
                 "Add Role",
                 "Add Department",
-                "Update Employee Role"
+                "Update Employee Role",
+                "Delete Employee",
+                "Delete Role",
+                "Delete Department"
             ]
         }
     ]).then((value) => {
@@ -90,7 +93,7 @@ const userPrompt = () => {
 // VIEW ALL EMPLOYEES
 const viewAllEmployees = () => {
     connection.query(
-        "SELECT employee.first_name, employee.last_name, department.dep_name FROM employee INNER JOIN role ON employee.role_id = role.id LEFT JOIN department ON department.id = role.department_id;",
+        "SELECT employee.first_name, employee.last_name FROM employee",
         (err, res) => {
             if (err) throw err;
             console.table(res);
@@ -277,5 +280,64 @@ const addDepartment = () => {
 
 // UPDATE EMPLOYEE ROLE
 const updateRole = () => {
-
+    connection.query(
+        "SELECT employee.first_name, employee.last_name, role.title FROM employee INNER JOIN role ON employee.id = role.id;",
+        (err, res) => {
+            if (err) throw err;
+            console.log(res);
+            inquirer.prompt([
+                {
+                    type: "rawlist",
+                    message: "Please specify the employee's first name:",
+                    name: "firstName",
+                    choices: () => {
+                        var firstName = [];
+                        for (var i = 0; i < res.length; i++) {
+                            firstName.push(res[i].first_name);
+                        }
+                        return firstName;
+                    }
+                },
+                {
+                    type: "rawlist",
+                    message: "Please specify the employee's last name:",
+                    name: "lastName",
+                    choices: () => {
+                        var lastName = [];
+                        for (var i = 0; i < res.length; i++) {
+                            lastName.push(res[i].last_name);
+                        }
+                        return lastName;
+                    }
+                },
+                {
+                    type: "rawlist",
+                    message: "Please specify the employee's new role:",
+                    name: "role",
+                    choices: chooseRole()
+                }
+            ]).then((value) => {
+                var roleId = chooseRole().indexOf(value.role) + 1;
+                connection.query("UPDATE employee SET WHERE ?",
+                    {
+                        first_name: value.firstName,
+                        last_name: value.lastName,
+                    },
+                    {
+                        role_id: roleId
+                    },
+                    (err, res) => {
+                        if (err) throw err;
+                        console.table(res);
+                        userPrompt();
+                    }
+                )
+            })
+        })
 }
+
+// DELETE EMPLOYEE
+
+// DELETE ROLE
+
+// DELETE DEPARTMENT
