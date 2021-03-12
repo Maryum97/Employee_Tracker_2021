@@ -42,7 +42,9 @@ const userPrompt = () => {
                 "Add Employee",
                 "Add Role",
                 "Add Department",
+                "Add Manager",
                 "Update Employee Role",
+                "Update Employee Manager",
                 "Delete Employee",
                 "Delete Role",
                 "Delete Department"
@@ -91,8 +93,16 @@ const userPrompt = () => {
                 addDepartment();
                 break;
 
+            case "Add Manager":
+                addManager();
+                break;
+
             case "Update Employee Role":
                 updateRole();
+                break;
+
+            case "Update Employee Manager":
+                updateManager();
                 break;
 
             case "Delete Employee":
@@ -256,6 +266,7 @@ const addEmployee = () => {
             (err) => {
                 if (err) throw err;
                 console.log("Your new employee has been added!");
+                console.table(res);
                 userPrompt();
             })
 
@@ -324,6 +335,42 @@ const addDepartment = () => {
         })
 }
 
+// ADD MANAGER
+const addManager = () => {
+    connection.query(
+        "SELECT * FROM manager;",
+        (err, res) => {
+            if (err) throw err;
+            inquirer.prompt([
+                {
+                    type: "input",
+                    message: "Please specify the manager's first name:",
+                    name: "firstName"
+                },
+                {
+                    type: "input",
+                    message: "Please specify the manager's last name:",
+                    name: "lastName"
+                }
+            ]).then((value) => {
+                connection.query(
+                    "INSERT INTO manager SET ?",
+                    {
+                        first_name: value.firstName,
+                        last_name: value.lastName
+                    },
+                    (err, res) => {
+                        if (err) throw err;
+                        console.log("Your manager has been added!");
+                        console.table(res);
+                        userPrompt();
+                    }
+                )
+            })
+        }
+    )
+}
+
 // UPDATE EMPLOYEE ROLE
 const updateRole = () => {
     connection.query(
@@ -368,7 +415,74 @@ const updateRole = () => {
                     [value.firstName, value.lastName],
                     (err, res) => {
                         if (err) throw err;
-                        console.log(res);
+                        console.log("Your employee's role has been updated!");
+                        console.table(res);
+                        userPrompt();
+                    }
+                )
+            })
+        })
+}
+
+// UPDATE EMPLOYEE MANAGER
+// First declare the function that returns an array of managers for the employee to be assigned to
+const selectManager = () => {
+    var managerArr = [];
+    connection.query(
+        "SELECT * FROM manager;",
+        (err, res) => {
+            if (err) throw err;
+            for (var i = 0; i < res.length; i++) {
+                managerArr.push(res[i].id);
+            }
+        }
+    )
+}
+// Function to update manager here
+const updateManager = () => {
+    connection.query(
+        "SELECT * FROM employee;",
+        (err, res) => {
+            if (err) throw err;
+            console.log(res);
+            inquirer.prompt([
+                {
+                    type: "rawlist",
+                    message: "Please specify the employee's first name:",
+                    name: "firstName",
+                    choices: () => {
+                        var firstName = [];
+                        for (var i = 0; i < res.length; i++) {
+                            firstName.push(res[i].first_name);
+                        }
+                        return firstName;
+                    }
+                },
+                {
+                    type: "rawlist",
+                    message: "Please specify the employee's last name:",
+                    name: "lastName",
+                    choices: () => {
+                        var lastName = [];
+                        for (var i = 0; i < res.length; i++) {
+                            lastName.push(res[i].last_name);
+                        }
+                        return lastName;
+                    }
+                },
+                {
+                    type: "rawlist",
+                    message: "Please specify the ID of the employee's new manager:",
+                    name: "manager",
+                    choices: selectManager()
+                }
+            ]).then((value) => {
+                var managerId = selectManager().indexOf(value.manager) + 1;
+                connection.query(`UPDATE employee SET manager_id = ${managerId} WHERE first_name = ? AND last_name=?`,
+                    [value.firstName, value.lastName],
+                    (err, res) => {
+                        if (err) throw err;
+                        console.log("Your employee's manager has been updated!");
                         console.table(res);
                         userPrompt();
                     }
@@ -397,8 +511,8 @@ const deleteEmployee = () => {
                     [value.employee],
                     (err, res) => {
                         if (err) throw err;
-                        console.table(res);
                         console.log("Your employee has been deleted!");
+                        console.table(res);
                         userPrompt();
                     })
             })
@@ -425,8 +539,8 @@ const deleteRole = () => {
                     [value.role],
                     (err, res) => {
                         if (err) throw err;
-                        console.table(res);
                         console.log("This role has been deleted!");
+                        console.table(res);
                         userPrompt();
                     })
             })
@@ -453,8 +567,8 @@ const deleteDepartment = () => {
                     [value.department],
                     (err, res) => {
                         if (err) throw err;
-                        console.table(res);
                         console.log("This department has been deleted!");
+                        console.table(res);
                         userPrompt();
                     })
             })
