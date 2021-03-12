@@ -37,7 +37,6 @@ CREATE TABLE manager (
 id INTEGER (100) auto_increment NOT NULL,
 first_name VARCHAR (100) NOT NULL,
 last_name VARCHAR (100) NOT NULL,
-manager_id INTEGER (100),
 PRIMARY KEY (id)
 );
 
