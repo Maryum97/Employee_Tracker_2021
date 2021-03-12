@@ -330,13 +330,11 @@ const updateRole = () => {
                 }
             ]).then((value) => {
                 var roleId = chooseRole().indexOf(value.role) + 1;
-                connection.query(`UPDATE employee SET role_id = ${roleId} WHERE ?`,
-                    {
-                        first_name: value.firstName,
-                        last_name: value.lastName,
-                    },
+                connection.query(`UPDATE employee SET role_id = ${roleId} WHERE first_name = ? AND last_name=?`,
+                    [value.firstName, value.lastName],
                     (err, res) => {
                         if (err) throw err;
+                        console.log(res);
                         console.table(res);
                         userPrompt();
                     }
@@ -360,10 +358,8 @@ const deleteEmployee = () => {
                 },
             ]).then((value) => {
                 connection.query(
-                    `DELETE FROM employee WHERE ?;`,
-                    {
-                        id: value.employee
-                    },
+                    `DELETE FROM employee WHERE id = ?;`,
+                    [value.employee],
                     (err, res) => {
                         if (err) throw err;
                         console.table("Your employee has been deleted!");
