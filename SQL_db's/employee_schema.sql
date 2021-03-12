@@ -41,10 +41,11 @@ SELECT * FROM employee;
 -- JOIN STATEMENTS HERE --
 
 -- JOIN 1 -- 
-SELECT employee.first_name, employee.last_name, department.dep_name
-FROM employee
-INNER JOIN role ON employee.role_id = role.id
-LEFT JOIN department ON department.id = role.department_id;
+SELECT employee.first_name, employee.last_name
+-- , department.dep_name
+FROM employee;
+-- INNER JOIN role ON employee.role_id = role.id
+-- LEFT JOIN department ON department.id = role.department_id;
 
 -- JOIN 2 --
 SELECT employee.first_name, employee.last_name, employee.role_id, role.title, role.salary, role.department_id

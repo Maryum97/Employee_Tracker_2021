@@ -15,4 +15,4 @@ VALUES ('Manager', 3000, 1),
 ('Lawyer', 3000, 5);
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES ('Maryum', 'Bokhari', 2, 2);
+VALUES ('Maryum', 'Bokhari', 2, null);
