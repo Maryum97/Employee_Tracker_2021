@@ -84,6 +84,18 @@ const userPrompt = () => {
             case "Update Employee Role":
                 updateRole();
                 break;
+
+            case "Delete Employee":
+                deleteEmployee();
+                break;
+
+            case "Delete Role":
+                deleteRole();
+                break;
+
+            case "Delete Department":
+                deleteDepartment();
+                break;
         }
     })
 }
@@ -137,7 +149,7 @@ const viewByRole = () => {
 // VIEW ALL EMPLOYEES BY DEPARTMENT
 const viewByDepartment = () => {
     connection.query(
-        "SELECT employee.first_name, employee.last_name, department.dep_name FROM employee INNER JOIN department ON employee.id = department.dep_name;",
+        "SELECT employee.first_name, employee.last_name, department.dep_name FROM employee LEFT JOIN department ON employee.id = department.dep_name;",
         (err, res) => {
             if (err) throw err;
             console.table(res);
@@ -281,7 +293,7 @@ const addDepartment = () => {
 // UPDATE EMPLOYEE ROLE
 const updateRole = () => {
     connection.query(
-        "SELECT employee.first_name, employee.last_name, role.title FROM employee INNER JOIN role ON employee.id = role.id;",
+        "SELECT * FROM employee;",
         (err, res) => {
             if (err) throw err;
             console.log(res);
@@ -318,13 +330,10 @@ const updateRole = () => {
                 }
             ]).then((value) => {
                 var roleId = chooseRole().indexOf(value.role) + 1;
-                connection.query("UPDATE employee SET WHERE ?",
+                connection.query(`UPDATE employee SET role_id = ${roleId} WHERE ?`,
                     {
                         first_name: value.firstName,
                         last_name: value.lastName,
-                    },
-                    {
-                        role_id: roleId
                     },
                     (err, res) => {
                         if (err) throw err;
@@ -337,7 +346,39 @@ const updateRole = () => {
 }
 
 // DELETE EMPLOYEE
+const deleteEmployee = () => {
+    connection.query(
+        "SELECT employee.id, employee.first_name, employee.last_name FROM employee;",
+        (err, res) => {
+            if (err) throw err;
+            viewAllEmployees();
+            inquirer.prompt([
+                {
+                    type: "input",
+                    message: "Please choose the ID of the employee that you would like to delete:",
+                    name: "employee"
+                },
+            ]).then((value) => {
+                connection.query(
+                    `DELETE FROM employee WHERE ?;`,
+                    {
+                        id: value.employee
+                    },
+                    (err, res) => {
+                        if (err) throw err;
+                        console.table("Your employee has been deleted!");
+                        userPrompt();
+                    })
+            })
+        })
+}
 
 // DELETE ROLE
+const deleteRole = () => {
+
+}
 
 // DELETE DEPARTMENT
+const deleteDepartment = () => {
+
+}

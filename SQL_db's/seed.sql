@@ -14,5 +14,5 @@ VALUES ('Manager', 3000, 1),
 ('Marketer', 3000, 4),
 ('Lawyer', 3000, 5);
 
-INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES ('Maryum', 'Bokhari', 2, null);
+INSERT INTO employee (id, first_name, last_name, role_id, manager_id)
+VALUES (1, 'Maryum', 'Bokhari', 1, null);

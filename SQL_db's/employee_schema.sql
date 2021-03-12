@@ -41,7 +41,7 @@ SELECT * FROM employee;
 -- JOIN STATEMENTS HERE --
 
 -- JOIN 1 -- 
-SELECT employee.first_name, employee.last_name
+SELECT employee.id, employee.first_name, employee.last_name
 -- , department.dep_name
 FROM employee;
 -- INNER JOIN role ON employee.role_id = role.id
