@@ -192,7 +192,7 @@ const viewByDepartment = () => {
 // VIEW ALL EMPLOYEES BY MANAGER
 const viewByManager = () => {
     connection.query(
-        "SELECT employee.first_name, employee.last_name, employee.manager_id, manager.first_name, manager.last_name FROM employee INNER JOIN manager ON employee.manager_id = manager.id;",
+        "SELECT e.first_name AS efn, e.last_name AS eln, e.manager_id, manager.first_name AS mfn, manager.last_name AS mln FROM employee AS e LEFT JOIN employee AS manager ON e.manager_id = manager.id;",
         (err, res) => {
             if (err) throw err;
             console.table(res);
@@ -266,7 +266,6 @@ const addEmployee = () => {
             (err) => {
                 if (err) throw err;
                 console.log("Your new employee has been added!");
-                console.table(res);
                 userPrompt();
             })
 
@@ -289,13 +288,19 @@ const addRole = () => {
                     type: "input",
                     message: "Please specify the salaray of the role:",
                     name: "salary"
+                },
+                {
+                    type: "input",
+                    message: "Please specify the department ID of the role:",
+                    name: "departmentId"
                 }
             ]).then((res) => {
                 connection.query(
                     "INSERT INTO role SET ?",
                     {
                         title: res.title,
-                        salary: res.salary
+                        salary: res.salary,
+                        departmentId: department_id
                     },
                     (err) => {
                         if (err) throw err;
@@ -378,7 +383,7 @@ const updateRole = () => {
         (err, res) => {
             if (err) throw err;
             console.log(res);
-            inquirer.prompt([
+            inquirer.prompt([ // plaese only specify one name with id
                 {
                     type: "rawlist",
                     message: "Please specify the employee's first name:",
@@ -426,8 +431,8 @@ const updateRole = () => {
 
 // UPDATE EMPLOYEE MANAGER
 // First declare the function that returns an array of managers for the employee to be assigned to
+var managerArr = [];
 const selectManager = () => {
-    var managerArr = [];
     connection.query(
         "SELECT * FROM manager;",
         (err, res) => {
