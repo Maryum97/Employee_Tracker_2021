@@ -300,7 +300,7 @@ const addRole = () => {
                     {
                         title: res.title,
                         salary: res.salary,
-                        departmentId: department_id
+                        department_id: res.departmentId
                     },
                     (err) => {
                         if (err) throw err;
@@ -383,19 +383,7 @@ const updateRole = () => {
         (err, res) => {
             if (err) throw err;
             console.log(res);
-            inquirer.prompt([ // plaese only specify one name with id
-                {
-                    type: "rawlist",
-                    message: "Please specify the employee's first name:",
-                    name: "firstName",
-                    choices: () => {
-                        var firstName = [];
-                        for (var i = 0; i < res.length; i++) {
-                            firstName.push(res[i].first_name);
-                        }
-                        return firstName;
-                    }
-                },
+            inquirer.prompt([ 
                 {
                     type: "rawlist",
                     message: "Please specify the employee's last name:",
@@ -416,8 +404,8 @@ const updateRole = () => {
                 }
             ]).then((value) => {
                 var roleId = chooseRole().indexOf(value.role) + 1;
-                connection.query(`UPDATE employee SET role_id = ${roleId} WHERE first_name = ? AND last_name = ?`,
-                    [value.firstName, value.lastName],
+                connection.query(`UPDATE employee SET role_id = ${roleId} WHERE last_name = ?`,
+                    [value.lastName],
                     (err, res) => {
                         if (err) throw err;
                         console.log("Your employee's role has been updated!");
@@ -453,18 +441,6 @@ const updateManager = () => {
             inquirer.prompt([
                 {
                     type: "rawlist",
-                    message: "Please specify the employee's first name:",
-                    name: "firstName",
-                    choices: () => {
-                        var firstName = [];
-                        for (var i = 0; i < res.length; i++) {
-                            firstName.push(res[i].first_name);
-                        }
-                        return firstName;
-                    }
-                },
-                {
-                    type: "rawlist",
                     message: "Please specify the employee's last name:",
                     name: "lastName",
                     choices: () => {
@@ -483,8 +459,8 @@ const updateManager = () => {
                 }
             ]).then((value) => {
                 var managerId = selectManager().indexOf(value.manager) + 1;
-                connection.query(`UPDATE employee SET manager_id = ${managerId} WHERE first_name = ? AND last_name = ?`,
-                    [value.firstName, value.lastName],
+                connection.query(`UPDATE employee SET manager_id = ${managerId} WHERE last_name = ?`,
+                    [value.lastName],
                     (err, res) => {
                         if (err) throw err;
                         console.log("Your employee's manager has been updated!");
