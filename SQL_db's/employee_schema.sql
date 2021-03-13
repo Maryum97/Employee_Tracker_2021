@@ -18,7 +18,7 @@ id INTEGER (100) auto_increment NOT NULL,
 title VARCHAR (100) NOT NULL,
 salary DECIMAL (10, 2) NOT NULL,
 department_id INTEGER (100) NOT NULL,
--- CONSTRAINT fk_department FOREIGN KEY (department_id) REFERENCES department(id) ON DELETE CASCADE,
+CONSTRAINT fk_department FOREIGN KEY (department_id) REFERENCES department(id) ON DELETE CASCADE,
 PRIMARY KEY (id)
 );
 
