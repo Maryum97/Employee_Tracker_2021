@@ -10,9 +10,11 @@ This repository contains another homework assignment conducted through the teach
 - Delete employees, roles, and/or departments
 
 Here is the link to the video to gain better understanding about the usage of this app:
+<br>
 <a href="https://drive.google.com/file/d/1sUbQcsZQJv-SxIQ-W44x35YmkabSiOke/view">Video Demonstration</a>
 <br>
 Here is a small clip from the video itself:
+![ezgif com-gif-maker (3)](https://user-images.githubusercontent.com/73832871/111081083-6d469f00-84f9-11eb-8b13-30e8254ab650.gif)
 <br>
 
 ## Table of Contents
