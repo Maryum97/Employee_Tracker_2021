@@ -55,7 +55,7 @@ JOIN department ON role.department_id = department.id
 ORDER BY employee.id;
 
 -- JOIN 3 (for manager) --
-SELECT e.first_name AS emp_first_name, e.last_name AS emp_last_name, e.manager_id, manager.first_name AS man_first_name, manager.last_name AS man_last_name
+SELECT e.first_name AS empfn, e.last_name AS empln, e.manager_id, manager.first_name AS manfn, manager.last_name AS manln
 FROM employee AS e
 LEFT JOIN employee AS manager ON e.manager_id = manager.id;
 -- joins with self-referencing --> joins table on table
