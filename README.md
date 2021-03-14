@@ -10,7 +10,7 @@ This repository contains another homework assignment conducted through the teach
 - Delete employees, roles, and/or departments
 
 Here is the link to the video to gain better understanding about the usage of this app:
-<video>
+<a href="https://drive.google.com/file/d/1sUbQcsZQJv-SxIQ-W44x35YmkabSiOke/view">Video Demonstration</a>
 <br>
 Here is a small clip from the video itself:
 <br>
@@ -55,9 +55,17 @@ After pursuing all of the downloads and installations above, the user must follo
 2. Open the terminal
 3. Run the following command in the terminal:
     > npm start
-    A menu of prompts appears in the terminal
-4. Choose any of the prompts to fulfil any of the requirements of the company (as listed in the repository description above)
-5. Once finished using the app, press 'CTRL + C' to kill the server
+4. A menu of prompts appears in the terminal. Choose any of the prompts to fulfil any of the requirements of the company (as listed in the repository description above)
+5. Once finished using the app, press 'CTRL + C' to kill the server. If the server asks if you want to 'Terminate batch job (Y/N)', type in 'Y', as in, 'yes', otherwise 'N', for 'no'.
+
+The user must beware of one thing: if they return an empty value for any input, the table returns empty at that instance of the added value, which may be problematic to read and understand as a database value! So they must make sure to ALWAYS provide an appropriate, legible value to all inputs!
+
+<i>EXAMPLE:</i>
+
+1. From the prompts, select: 'View All Employees By Role'
+2. Then select: 'Update Employee Role'
+3. Choose the targeted employee's last name, and assign them a new role
+4. Select 'Update Employee Role' again, and now look at the updated role of the employee!
 
 ## 💻 Usage
 Watch the video in the description above and read the instructions, in order to make correct use of the app. Feel free to use it at all times, after ensuring that the 'npm start' command is running in the server.
