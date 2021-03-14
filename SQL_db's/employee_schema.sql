@@ -48,12 +48,14 @@ FROM employee
 INNER JOIN role ON employee.role_id = role.id;
 
 -- JOIN 2 --
-SELECT employee.first_name, employee.last_name, department.dep_name
+SELECT employee.first_name, employee.last_name, department.dep_name AS Department
 FROM employee
-INNER JOIN department ON employee.role_id = department.dep_name;
+JOIN role ON employee.role_id = role.id
+JOIN department ON role.department_id = department.id
+ORDER BY employee.id;
 
 -- JOIN 3 (for manager) --
-SELECT e.first_name AS emp_first_name, e.last_name AS emp_last_name, e.manager_id, manager.first_name AS man_fisrt_name, manager.last_name AS man_last_name
+SELECT e.first_name AS emp_first_name, e.last_name AS emp_last_name, e.manager_id, manager.first_name AS man_first_name, manager.last_name AS man_last_name
 FROM employee AS e
 LEFT JOIN employee AS manager ON e.manager_id = manager.id;
 -- joins with self-referencing --> joins table on table

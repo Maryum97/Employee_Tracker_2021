@@ -37,7 +37,8 @@ const userPrompt = () => {
                 "View All Departments",
                 "View All Managers",
                 "View All Employees By Role",
-                "View all Employees By Manager",
+                "View All Employees By Department",
+                "View All Employees By Manager",
                 "Add Employee",
                 "Add Role",
                 "Add Department",
@@ -70,6 +71,10 @@ const userPrompt = () => {
 
             case "View All Employees By Role":
                 viewByRole();
+                break;
+
+            case "View All Employees By Department":
+                viewByDepartment();
                 break;
 
             case "View all Employees By Manager":
@@ -173,10 +178,21 @@ const viewByRole = () => {
         });
 }
 
+// VIEW ALL EMPLOYEES BY DEPARTMENT
+const viewByDepartment = () => {
+    connection.query(
+        "SELECT employee.first_name, employee.last_name, department.dep_name AS Department FROM employee JOIN role ON employee.role_id = role.id JOIN department ON role.department_id = department.id ORDER BY employee.id;",
+        (err, res) => {
+            if (err) throw err;
+            console.table(res);
+            userPrompt();
+        });
+}
+
 // VIEW ALL EMPLOYEES BY MANAGER
 const viewByManager = () => {
     connection.query(
-        "SELECT e.first_name AS emp_first_name, e.last_name AS emp_last_name, e.manager_id, manager.first_name AS man_fisrt_name, manager.last_name AS man_last_name FROM employee AS e LEFT JOIN employee AS manager ON e.manager_id = manager.id;",
+        "SELECT e.first_name AS emp_first_name, e.last_name AS emp_last_name, e.manager_id, manager.first_name AS man_first_name, manager.last_name AS man_last_name FROM employee AS e LEFT JOIN employee AS manager ON e.manager_id = manager.id;",
         (err, res) => {
             if (err) throw err;
             console.table(res);
@@ -500,7 +516,7 @@ const deleteRole = () => {
             ]).then((value) => {
                 console.log(value.role);
                 connection.query(
-                    `DELETE FROM employee WHERE id = ?;`,
+                    `DELETE FROM role WHERE id = ?;`,
                     [value.role],
                     (err, res) => {
                         if (err) throw err;
