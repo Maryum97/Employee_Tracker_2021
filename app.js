@@ -77,7 +77,7 @@ const userPrompt = () => {
                 viewByDepartment();
                 break;
 
-            case "View all Employees By Manager":
+            case "View All Employees By Manager":
                 viewByManager();
                 break;
 
@@ -192,9 +192,10 @@ const viewByDepartment = () => {
 // VIEW ALL EMPLOYEES BY MANAGER
 const viewByManager = () => {
     connection.query(
-        "SELECT e.first_name AS emp_first_name, e.last_name AS emp_last_name, e.manager_id, manager.first_name AS man_first_name, manager.last_name AS man_last_name FROM employee AS e LEFT JOIN employee AS manager ON e.manager_id = manager.id;",
+        "SELECT e.first_name AS empfn, e.last_name AS empln, e.manager_id, manager.first_name AS manfn, manager.last_name AS manln FROM employee AS e LEFT JOIN employee AS manager ON e.manager_id = manager.id;",
         (err, res) => {
             if (err) throw err;
+            console.log("hi!");
             console.table(res);
             userPrompt();
         }
@@ -382,7 +383,6 @@ const updateRole = () => {
         "SELECT * FROM employee;",
         (err, res) => {
             if (err) throw err;
-            console.log(res);
             inquirer.prompt([ 
                 {
                     type: "rawlist",
@@ -437,7 +437,6 @@ const updateManager = () => {
         "SELECT * FROM employee;",
         (err, res) => {
             if (err) throw err;
-            console.log(res);
             inquirer.prompt([
                 {
                     type: "rawlist",
@@ -486,7 +485,6 @@ const deleteEmployee = () => {
                     name: "employee"
                 },
             ]).then((value) => {
-                console.log(value.employee);
                 connection.query(
                     `DELETE FROM employee WHERE id = ?;`,
                     [value.employee],
@@ -514,7 +512,6 @@ const deleteRole = () => {
                     name: "role"
                 },
             ]).then((value) => {
-                console.log(value.role);
                 connection.query(
                     `DELETE FROM role WHERE id = ?;`,
                     [value.role],
@@ -542,7 +539,6 @@ const deleteDepartment = () => {
                     name: "department"
                 },
             ]).then((value) => {
-                console.log(value.department);
                 connection.query(
                     `DELETE FROM department WHERE id = ?;`,
                     [value.department],
