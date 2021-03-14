@@ -37,7 +37,6 @@ const userPrompt = () => {
                 "View All Departments",
                 "View All Managers",
                 "View All Employees By Role",
-                "View all Employees By Department",
                 "View all Employees By Manager",
                 "Add Employee",
                 "Add Role",
@@ -71,10 +70,6 @@ const userPrompt = () => {
 
             case "View All Employees By Role":
                 viewByRole();
-                break;
-
-            case "View All Employees By Department":
-                viewByDepartment();
                 break;
 
             case "View all Employees By Manager":
@@ -158,7 +153,7 @@ const viewAllDepartments = () => {
 // VIEW ALL MANAGERS
 const viewAllManagers = () => {
     connection.query(
-        "SELECT * FROM manager",
+        "SELECT e.manager_id, manager.first_name, manager.last_name FROM employee AS e LEFT JOIN employee AS manager ON e.manager_id = manager.id;",
         (err, res) => {
             if (err) throw err;
             console.table(res);
@@ -178,21 +173,10 @@ const viewByRole = () => {
         });
 }
 
-// VIEW ALL EMPLOYEES BY DEPARTMENT
-const viewByDepartment = () => {
-    connection.query(
-        "SELECT employee.first_name, employee.last_name, department.dep_name FROM employee LEFT JOIN department ON employee.id = department.dep_name;",
-        (err, res) => {
-            if (err) throw err;
-            console.table(res);
-            userPrompt();
-        });
-}
-
 // VIEW ALL EMPLOYEES BY MANAGER
 const viewByManager = () => {
     connection.query(
-        "SELECT e.first_name AS efn, e.last_name AS eln, e.manager_id, manager.first_name AS mfn, manager.last_name AS mln FROM employee AS e LEFT JOIN employee AS manager ON e.manager_id = manager.id;",
+        "SELECT e.first_name AS emp_first_name, e.last_name AS emp_last_name, e.manager_id, manager.first_name AS man_fisrt_name, manager.last_name AS man_last_name FROM employee AS e LEFT JOIN employee AS manager ON e.manager_id = manager.id;",
         (err, res) => {
             if (err) throw err;
             console.table(res);

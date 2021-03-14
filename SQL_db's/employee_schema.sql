@@ -50,10 +50,10 @@ INNER JOIN role ON employee.role_id = role.id;
 -- JOIN 2 --
 SELECT employee.first_name, employee.last_name, department.dep_name
 FROM employee
-JOIN department ON employee.id = department.dep_name;
+INNER JOIN department ON employee.role_id = department.dep_name;
 
 -- JOIN 3 (for manager) --
-SELECT e.first_name AS efn, e.last_name AS eln, e.manager_id, manager.first_name AS mfn, manager.last_nameAS mln
+SELECT e.first_name AS emp_first_name, e.last_name AS emp_last_name, e.manager_id, manager.first_name AS man_fisrt_name, manager.last_name AS man_last_name
 FROM employee AS e
 LEFT JOIN employee AS manager ON e.manager_id = manager.id;
--- joins with self-referencing --> join table on table
+-- joins with self-referencing --> joins table on table
